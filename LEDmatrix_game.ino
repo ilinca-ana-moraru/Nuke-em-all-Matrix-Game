@@ -187,7 +187,7 @@ bool joyMoved = false;
 byte menuLevel = FIRST_MENU;
 byte mainMenuPick = FIRST_COLUMN;
 bool wasAboutTextPrinted = false;
-byte secondMenuPick = FIRST_COLUMN;
+byte secondMenuPick;
 byte matrixBrightness = EEPROM[MATRIX_BRIGHTNESS_STORRING_SPACE];
 byte lcdBrightness = EEPROM[LCD_BRIGHTNESS_STORRING_SPACE];
 byte lcdScaledBrighness = map(lcdBrightness,0,255,0,16) + 1;
@@ -208,6 +208,7 @@ long bombWallsTimer = 0;
 int score = 0;
 extern int totalScore;
 int nrOfWalls;
+int wasCheckedForHighScore = false;
 
 void setup() {
   lcd.begin(LCD_ROWS, LCD_COLS);
@@ -234,12 +235,9 @@ void setup() {
   for(int i = 0; i < LENGTH_OF_NAME; i++){
     currentName[i] = EEPROM[NAME_STORRING_SPACE+i];
   }
-  Serial.begin(115200);
 }
 
 void loop() {
-  // Serial.println(LCDChanged);
-
   if(LCDState == WELCOME){
     if(wasLCDResetForMessageDisplay == false){
       setLCDForMessageDisplay();
@@ -255,6 +253,11 @@ void loop() {
   }
 
   if(LCDState == WINNING_INFO1 || LCDState == WINNING_INFO2){
+    if(wasCheckedForHighScore == false){
+      checkForHighScores();
+      wasCheckedForHighScore = true;
+
+    }
     if(LCDChanged == true){
       displayWinGameInfo();
     }
@@ -276,6 +279,7 @@ void loop() {
       }
     }
     changeMenu();
+
   }
 
   if(LCDState == PLAYING){
@@ -427,6 +431,7 @@ void loop() {
 
 //new level, if lost, function is called
 void startLevel(){
+  wasCheckedForHighScore = false;
   lifes = MAX_LIFES;
   totalScore += score;
   score = 0;
@@ -537,12 +542,17 @@ void selectMenu(){
       
     case SECOND_COLUMN:
       menuLevel = SECOND_MENU;
+      mainMenuPick = HIGHSCORES;
+      break;
+    
+    case THIRD_COLUMN:
+      menuLevel = SECOND_MENU;
       currentMenuPos = FIRST_COLUMN;
       currentMenuPosBias = FIRST_COLUMN;
       mainMenuPick = SETTINGS;
       break;
 
-    case THIRD_COLUMN:
+    case FORTH_COLUMN:
       menuLevel = SECOND_MENU;
       mainMenuPick = ABOUT;
       wasAboutTextPrinted = false;
@@ -553,22 +563,20 @@ void selectMenu(){
     }
   }
   else if(menuLevel == SECOND_MENU){
+    menuLevel = THIRD_MENU;
     if(mainMenuPick == SETTINGS){ 
 
       switch (currentMenuPos){
         case FIRST_COLUMN:
-          menuLevel = THIRD_MENU;
           secondMenuPick = CHANGE_NAME;
           currentNameSettingPosition = 0;
           break;
 
         case SECOND_COLUMN:
-          menuLevel = THIRD_MENU;
           secondMenuPick = LCD_BRIGHTNESS;
           break;
 
         case THIRD_COLUMN:
-          menuLevel = THIRD_MENU;
           secondMenuPick = MATRIX_BRIGHTNESS;
           break;
         
@@ -576,5 +584,22 @@ void selectMenu(){
           break;
       }
     }
+
+    else if(mainMenuPick == HIGHSCORES){
+      switch(currentMenuPos){
+        case FIRST_COLUMN:
+          deleteHighscores();
+          secondMenuPick == RESET_HIGHSCORES;
+          break;
+
+        case SECOND_COLUMN:
+          secondMenuPick = DISPLAY_HIGHSCORES;
+          break;
+        
+        default:
+          break;
+      }
+    }
   }
+
 }

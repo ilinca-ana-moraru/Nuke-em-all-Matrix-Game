@@ -18,13 +18,17 @@
 #define SECOND_SUBMENU 14
 #define TIME_BETWEEN_LCD_LETTERS 300
 
-#define MAIN_MENU_COLS 3
-#define SETTINGS_MENU_COLS 4
+#define MAIN_MENU_COLS 4
+#define SETTINGS_MENU_COLS 3
+#define HIGHSCORE_COLS 2
 #define MENU_SELECTING_DOT 1
 #define MENU_MOVE_INTERVAL 300
 
 #define SETTINGS 15
 #define ABOUT 16
+#define HIGHSCORES 21
+#define RESET_HIGHSCORES 50
+#define DISPLAY_HIGHSCORES 31
 
 #define LCD_BRIGHTNESS 17
 #define MATRIX_BRIGHTNESS 18
@@ -38,6 +42,7 @@
 #define FIRST_MENU 20
 #define SECOND_MENU 21
 #define THIRD_MENU 22
+#define FORTH_MENU 23
 
 #define FIRST_COLUMN 0
 #define SECOND_COLUMN 1
@@ -51,6 +56,11 @@
 #define MATRIX_BRIGHTNESS_STORRING_SPACE 120
 #define LCD_BRIGHTNESS_STORRING_SPACE 160
 #define NAME_STORRING_SPACE 170
+#define TOP3_NAMES 180
+#define TOP3_SCORES 190
+#define TOP3_SAVED_GAMES 300
+#define SIZE_OF_TOP 3
+#define SIZE_OF_SCORE 8
 
 
 #define MAX_SCALED_BRIGHTNESS 16
@@ -93,5 +103,9 @@ void changeName();
 void saveName();
 
 void displayWinGameInfo();
+
+void deleteHighscores();
+
+void checkForHighScores();
 
 #endif

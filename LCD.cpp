@@ -32,6 +32,7 @@ extern byte mainMenuPick;
 extern bool wasAboutTextPrinted;
 unsigned long lastScrollChange = 0;
 extern byte secondMenuPick;
+extern byte thirdMenuPick;
 
 extern byte matrixBrightness;
 unsigned long lastBrightnessChange = 0;
@@ -85,6 +86,7 @@ void setLCDForMessageDisplay(){
 }
 
 void displayMenu(){
+
   LCDChanged = false;
   lcd.clear();
   lcd.noAutoscroll();        
@@ -108,7 +110,7 @@ void displayMenu(){
         else{
           lcd.print(" ");
         }
-        lcd.print("Settings");
+        lcd.print("Highscores");
         break;
 
       case SECOND_COLUMN:
@@ -119,10 +121,30 @@ void displayMenu(){
         else{
           lcd.print(" ");
         }
-        lcd.print("Settings");
+        lcd.print("Highscores");
 
         lcd.setCursor(FIRST_ROW,SECOND_COLUMN);
         if(currentMenuPos == THIRD_COLUMN){
+          lcd.write(MENU_SELECTING_DOT);
+        }
+        else{
+          lcd.print(" ");
+        }
+        lcd.print("Settings");
+        break;
+
+      case THIRD_COLUMN:
+        lcd.setCursor(FIRST_ROW,FIRST_COLUMN);
+        if(currentMenuPos == THIRD_COLUMN){
+          lcd.write(MENU_SELECTING_DOT);
+        }
+        else{
+          lcd.print(" ");
+        }
+        lcd.print("Settings");
+
+        lcd.setCursor(FIRST_ROW,SECOND_COLUMN);
+        if(currentMenuPos == FORTH_COLUMN){
           lcd.write(MENU_SELECTING_DOT);
         }
         else{
@@ -178,6 +200,27 @@ void displayMenu(){
           break;
       }
     }
+
+    else if(mainMenuPick == HIGHSCORES){
+      lcd.setCursor(FIRST_ROW,FIRST_COLUMN);
+      if(currentMenuPos == FIRST_COLUMN){
+        lcd.write(MENU_SELECTING_DOT);
+      }
+      else{
+        lcd.print(" ");
+      }
+      lcd.write("Reset scores");
+      lcd.setCursor(FIRST_ROW,SECOND_COLUMN);
+      if(currentMenuPos == SECOND_COLUMN){
+        lcd.write(MENU_SELECTING_DOT);
+      }
+      else{
+        lcd.print(" ");
+      }
+      lcd.print("Display scores");
+
+    }
+
   }
   else if(menuLevel == THIRD_MENU){
     if(secondMenuPick == CHANGE_NAME){
@@ -199,7 +242,6 @@ void displayMenu(){
       }
     }
 
-
     else if(secondMenuPick == LCD_BRIGHTNESS){
       lcd.setCursor(FIRST_ROW,FIRST_COLUMN);
       lcd.print("LCD brightness");
@@ -217,6 +259,34 @@ void displayMenu(){
         lcd.write(SELECT_BRIGHTNESS);
       }
     }
+  
+    else if(secondMenuPick == RESET_HIGHSCORES){
+      lcd.setCursor(FIRST_ROW,FIRST_COLUMN);
+      lcd.print("Highscores");
+      lcd.setCursor(FIRST_ROW,SECOND_COLUMN);
+      lcd.print("deleted.");
+    }
+    else if(secondMenuPick == DISPLAY_HIGHSCORES){
+      lcd.setCursor(FIRST_ROW,FIRST_COLUMN);
+      lcd.print("TOP 3:");
+      lcd.setCursor(FIRST_ROW, SECOND_COLUMN);
+      if(currentMenuPos != 0){
+        lcd.print(currentMenuPos);
+        lcd.print(") ");
+      }
+      if(EEPROM[TOP3_SAVED_GAMES] >= currentMenuPos && currentMenuPos != 0){
+        char ch;
+        for(int j = 0; j < LENGTH_OF_NAME; j++){
+          ch = EEPROM[(currentMenuPos - 1)* SIZE_OF_TOP + j];
+          lcd.print(ch);
+        }
+        lcd.print(" ");
+        for(int i = 0; i < SIZE_OF_SCORE; i++){
+          lcd.print(EEPROM[(currentMenuPos - 1) * SIZE_OF_SCORE] + i);
+        }
+
+      }
+    }
   }
 }
 
@@ -224,7 +294,6 @@ void displayMenu(){
 void changeMenu() {
   int xValue = analogRead(Y_PIN);
   int yValue = analogRead(X_PIN);
-  
    //go back to previous menu
   goBackRead = !digitalRead(GO_BACK_PIN);
   if(millis() - lastGoBackCheck > PRESS_DEBOUNCE_TIME){
@@ -232,7 +301,6 @@ void changeMenu() {
 
       if(goBackRead != goBackState){
         goBackState = goBackRead;
-
         if(goBackState == HIGH){
           if(menuLevel == THIRD_MENU && secondMenuPick == CHANGE_NAME){
             saveName();
@@ -260,8 +328,26 @@ void changeMenu() {
     menuCols =  MAIN_MENU_COLS;
   }
   else if(menuLevel == SECOND_MENU){
-    menuCols = SETTINGS_MENU_COLS;
+    if( mainMenuPick == SETTINGS){
+      menuCols = SETTINGS_MENU_COLS;
+    }
+    else if(mainMenuPick == HIGHSCORES){
+      menuCols = HIGHSCORE_COLS;
+    }
   }
+
+  else if(menuLevel == THIRD_MENU){
+    if(mainMenuPick == HIGHSCORES){
+    if(secondMenuPick == RESET_HIGHSCORES){
+      menuCols = 2;
+    }
+    else if(secondMenuPick == DISPLAY_HIGHSCORES){
+      menuCols = 4;
+    }
+
+    }
+  }
+
   if (xValue > MAX_THRESHOLD) {
     if (currentMenuPos < currentMenuPosBias + LCD_COLS - 1) {
       currentMenuPos++;
@@ -486,7 +572,24 @@ void displayWinGameInfo(){
   if(LCDState == WINNING_INFO2){
     lcd.print("Score: ");
     lcd.print(totalScore);
-    Serial.print("statistics\n");
   }
   LCDChanged = false;
+}
+
+void deleteHighscores(){
+  EEPROM[TOP3_SAVED_GAMES] = 0;
+}
+
+void checkForHighScores(){
+  if(EEPROM[TOP3_SAVED_GAMES] == 0){
+    EEPROM[TOP3_SAVED_GAMES] = 1;
+    for(int i = 0 ; i < LENGTH_OF_NAME; i++){
+      EEPROM[TOP3_NAMES+i] = EEPROM[NAME_STORRING_SPACE+i];
+    }
+    int copyTotalScore = totalScore;
+    for(int i = SIZE_OF_SCORE - 1; i >= 0; i--){
+      EEPROM[TOP3_SAVED_GAMES + i] = copyTotalScore%10;
+      copyTotalScore /= 10;
+    }
+  }
 }

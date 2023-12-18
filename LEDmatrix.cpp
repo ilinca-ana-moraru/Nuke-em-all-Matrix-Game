@@ -130,20 +130,19 @@ void updateMatrix() {
 
 // generates new map
 void generateMap(){
-  matrix[6][6] = WALL;
   xPos = xDefaultDistanceBetweenPosAndBias + xBias;
   yPos = yDefaultDistanceBetweenPosAndBias + yBias;
-  // for(int i = 0; i < MAP_SIZE; i++){
-  //   for(int j = 0; j < MAP_SIZE; j++){
-  //     randomNumber = random(2);
-  //       if(randomNumber > 0){
-  //         matrix[i][j] = WALL;
-  //       }
-  //       else{
-  //         matrix[i][j] = EMPTY_SPACE;
-  //       }
-  //   }
-  // }
+  for(int i = 0; i < MAP_SIZE; i++){
+    for(int j = 0; j < MAP_SIZE; j++){
+      randomNumber = random(2);
+        if(randomNumber > 0){
+          matrix[i][j] = WALL;
+        }
+        else{
+          matrix[i][j] = EMPTY_SPACE;
+        }
+    }
+  }
   // make sure that it is possible for the player to move from initial position and drop bomb
   matrix[xPos][yPos] = EMPTY_SPACE;
   // checks if there is already a way to move from  initial position
@@ -163,70 +162,70 @@ void generateMap(){
   matrix[xPos + 2 * randomDirection.x][yPos + 2 * randomDirection.y] = EMPTY_SPACE;
   matrix[xPos + randomDirection.x][yPos + randomDirection.y] = EMPTY_SPACE;      
 
-  // if(level == LEVEL1){
-  //   nrOfEnemys = NR_OF_ENEMYS_LEV1;
-  // }
+  if(level == LEVEL1){
+    nrOfEnemys = NR_OF_ENEMYS_LEV1;
+  }
 
-  // //enemys
-  // if(level == LEVEL2){
-  //   nrOfEnemys = NR_OF_ENEMYS_LEV2;
-  //   enemyMoveInterval = ENEMY_MOVE_INTERVAL_LEV2;
-  //   damageInterval = enemyMoveInterval * PLAYER_IS_DAMAGED_DURATION_PERCENTAGE;
+  //enemys
+  if(level == LEVEL2){
+    nrOfEnemys = NR_OF_ENEMYS_LEV2;
+    enemyMoveInterval = ENEMY_MOVE_INTERVAL_LEV2;
+    damageInterval = enemyMoveInterval * PLAYER_IS_DAMAGED_DURATION_PERCENTAGE;
 
-  //   enemys[FIRST_ENEMY].x = random(MAP_SIZE);
-  //   if(enemys[FIRST_ENEMY].x > 4 && enemys[FIRST_ENEMY].x < 12){
-  //     enemys[FIRST_ENEMY].y = random(4);
-  //   }
-  //   else{
-  //     enemys[FIRST_ENEMY].y = random(MAP_SIZE/2);
-  //   }
-  //   matrix[enemys[FIRST_ENEMY].x][enemys[FIRST_ENEMY].y] = ENEMY;
-  //   enemys[FIRST_ENEMY].moveDirection = FIRST_DIRECTION;
+    enemys[FIRST_ENEMY].x = random(MAP_SIZE);
+    if(enemys[FIRST_ENEMY].x > 4 && enemys[FIRST_ENEMY].x < 12){
+      enemys[FIRST_ENEMY].y = random(4);
+    }
+    else{
+      enemys[FIRST_ENEMY].y = random(MAP_SIZE/2);
+    }
+    matrix[enemys[FIRST_ENEMY].x][enemys[FIRST_ENEMY].y] = ENEMY;
+    enemys[FIRST_ENEMY].moveDirection = FIRST_DIRECTION;
 
-  //   enemys[SECOND_ENEMY].x = MAP_SIZE - 1 - enemys[FIRST_ENEMY].x;
-  //   enemys[SECOND_ENEMY].y = MAP_SIZE - 1 - enemys[FIRST_ENEMY].y;
-  //   matrix[enemys[SECOND_ENEMY].x][enemys[SECOND_ENEMY].y] = ENEMY;
-  //   enemys[SECOND_ENEMY].moveDirection = FIRST_DIRECTION;
+    enemys[SECOND_ENEMY].x = MAP_SIZE - 1 - enemys[FIRST_ENEMY].x;
+    enemys[SECOND_ENEMY].y = MAP_SIZE - 1 - enemys[FIRST_ENEMY].y;
+    matrix[enemys[SECOND_ENEMY].x][enemys[SECOND_ENEMY].y] = ENEMY;
+    enemys[SECOND_ENEMY].moveDirection = FIRST_DIRECTION;
 
-  // }
-  //   if(level == LEVEL3){
-  //   nrOfEnemys = NR_OF_ENEMYS_LEV3;
-  //   enemyMoveInterval = ENEMY_MOVE_INTERVAL_LEV3;
-  //   damageInterval = enemyMoveInterval * PLAYER_IS_DAMAGED_DURATION_PERCENTAGE;
+  }
+    if(level == LEVEL3){
+    nrOfEnemys = NR_OF_ENEMYS_LEV3;
+    enemyMoveInterval = ENEMY_MOVE_INTERVAL_LEV3;
+    damageInterval = enemyMoveInterval * PLAYER_IS_DAMAGED_DURATION_PERCENTAGE;
 
-  //   enemys[FIRST_ENEMY].x = random(MAP_SIZE/2);
-  //   if(enemys[FIRST_ENEMY].x > 4){
-  //     enemys[FIRST_ENEMY].y = random(4);
-  //   }
-  //   else{
-  //     enemys[FIRST_ENEMY].y = random(MAP_SIZE/2);
-  //   }
-  //   matrix[enemys[FIRST_ENEMY].x][enemys[FIRST_ENEMY].y] = ENEMY;
-  //   enemys[FIRST_ENEMY].moveDirection = FIRST_DIRECTION;
+    enemys[FIRST_ENEMY].x = random(MAP_SIZE/2);
+    if(enemys[FIRST_ENEMY].x > 4){
+      enemys[FIRST_ENEMY].y = random(4);
+    }
+    else{
+      enemys[FIRST_ENEMY].y = random(MAP_SIZE/2);
+    }
+    matrix[enemys[FIRST_ENEMY].x][enemys[FIRST_ENEMY].y] = ENEMY;
+    enemys[FIRST_ENEMY].moveDirection = FIRST_DIRECTION;
 
-  //   enemys[SECOND_ENEMY].x = MAP_SIZE - 1 - enemys[FIRST_ENEMY].x;
-  //   enemys[SECOND_ENEMY].y = MAP_SIZE - 1 - enemys[FIRST_ENEMY].y;
-  //   matrix[enemys[SECOND_ENEMY].x][enemys[SECOND_ENEMY].y] = ENEMY;
-  //   enemys[SECOND_ENEMY].moveDirection = FIRST_DIRECTION;
+    enemys[SECOND_ENEMY].x = MAP_SIZE - 1 - enemys[FIRST_ENEMY].x;
+    enemys[SECOND_ENEMY].y = MAP_SIZE - 1 - enemys[FIRST_ENEMY].y;
+    matrix[enemys[SECOND_ENEMY].x][enemys[SECOND_ENEMY].y] = ENEMY;
+    enemys[SECOND_ENEMY].moveDirection = FIRST_DIRECTION;
 
 
-  //   enemys[THIRD_ENEMY].x = random(MAP_SIZE/2)+ MAP_SIZE/2;
-  //   if(enemys[THIRD_ENEMY].x < 12){
-  //     enemys[THIRD_ENEMY].y = random(4);
-  //   }
-  //   else{
-  //     enemys[THIRD_ENEMY].y = random(MAP_SIZE/2);
-  //   }
+    enemys[THIRD_ENEMY].x = random(MAP_SIZE/2)+ MAP_SIZE/2;
+    if(enemys[THIRD_ENEMY].x < 12){
+      enemys[THIRD_ENEMY].y = random(4);
+    }
+    else{
+      enemys[THIRD_ENEMY].y = random(MAP_SIZE/2);
+    }
 
-  //   matrix[enemys[THIRD_ENEMY].x][enemys[THIRD_ENEMY].y] = ENEMY;
-  //   enemys[THIRD_ENEMY].moveDirection = FIRST_DIRECTION;
+    matrix[enemys[THIRD_ENEMY].x][enemys[THIRD_ENEMY].y] = ENEMY;
+    enemys[THIRD_ENEMY].moveDirection = FIRST_DIRECTION;
 
-  //   enemys[FORTH_ENEMY].x = MAP_SIZE - 1 - enemys[THIRD_ENEMY].x;
-  //   enemys[FORTH_ENEMY].y = MAP_SIZE - 1 - enemys[THIRD_ENEMY].y;
-  //   matrix[enemys[FORTH_ENEMY].x][enemys[THIRD_ENEMY].y] = ENEMY;
-  //   enemys[FORTH_ENEMY].moveDirection = FIRST_DIRECTION;
+    enemys[FORTH_ENEMY].x = MAP_SIZE - 1 - enemys[THIRD_ENEMY].x;
+    enemys[FORTH_ENEMY].y = MAP_SIZE - 1 - enemys[THIRD_ENEMY].y;
+    matrix[enemys[FORTH_ENEMY].x][enemys[THIRD_ENEMY].y] = ENEMY;
+    enemys[FORTH_ENEMY].moveDirection = FIRST_DIRECTION;
 
-  // }
+  }
 
 }
 
