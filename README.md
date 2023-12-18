@@ -38,3 +38,12 @@ Menu Task: Create a menu for the game. You should scroll on the LCD with the joy
 or after a few moments.<br>
 (b) Screen 2: display relevant game info: score, time, lives left etc. Must inform player if he/she beat the highscore. This menu should only be closed by the player,
 pressing a button.<br>
+
+
+# Nuke 'em all
+
+I chose to build a mining game because I like the visual of a bomb being exploded and thought it would look nice and  give dimention on a limiting 8X8 LED matrix. The game 
+takes place in a mine, and the player's scope is to bomb every wall while running from the explosion, as he can lose lifes otherwise. The game has 3 levels, and at the start of each level the player starts with 3 lifes. If all 3 lifes are lost, the game is ended. If the player has at least 1 life after bombing all walls, the next level starts. <br>
+The levels have progressing difficulty, as in level 2 and 3 the player encounters 2 and 4 enemys. When an enemy hits an wall, he takes a new direction. The walls, as well as the enemys starting position and movement are randomly generated using the Arduino random() function. 
+
+The 
