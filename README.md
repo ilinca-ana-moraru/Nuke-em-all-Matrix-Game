@@ -56,3 +56,6 @@ In the LCD menu, you can select to start the game,highscores( see top 3 or reset
 
 # Photo
 ![photo](https://github.com/ilinca-ana-moraru/Nuke-em-all-Matrix-Game/blob/main/led_matrix_game_photo.jpeg)
+
+# Video
+https://youtu.be/ZaMRZuPVT5I
