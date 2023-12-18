@@ -56,7 +56,9 @@ int damageInterval;
 extern int nrOfWalls;
 extern long bombWallsTimer;
 extern int score;
+extern int totalScore;
 extern byte lifes;
+
 void updateMatrix() {
 
   // check for things to update in the matrix
@@ -186,16 +188,6 @@ void generateMap(){
   //   matrix[enemys[SECOND_ENEMY].x][enemys[SECOND_ENEMY].y] = ENEMY;
   //   enemys[SECOND_ENEMY].moveDirection = FIRST_DIRECTION;
 
-
-  //   Serial.print("Enemy 1: x: ");
-  //   Serial.print(enemys[0].x);
-  //   Serial.print(" y: ");
-  //   Serial.println(enemys[0].y);
-  //   Serial.print("Enemy 2: x: ");
-  //   Serial.print(enemys[1].x);
-  //   Serial.print(" y: ");
-  //   Serial.println(enemys[1].y);
-
   // }
   //   if(level == LEVEL3){
   //   nrOfEnemys = NR_OF_ENEMYS_LEV3;
@@ -233,23 +225,6 @@ void generateMap(){
   //   enemys[FORTH_ENEMY].y = MAP_SIZE - 1 - enemys[THIRD_ENEMY].y;
   //   matrix[enemys[FORTH_ENEMY].x][enemys[THIRD_ENEMY].y] = ENEMY;
   //   enemys[FORTH_ENEMY].moveDirection = FIRST_DIRECTION;
-
-  //   Serial.print("Enemy 1: x: ");
-  //   Serial.print(enemys[0].x);
-  //   Serial.print(" y: ");
-  //   Serial.println(enemys[0].y);
-  //   Serial.print("Enemy 2: x: ");
-  //   Serial.print(enemys[1].x);
-  //   Serial.print(" y: ");
-  //   Serial.println(enemys[1].y);
-  //   Serial.print("Enemy 3: x: ");
-  //   Serial.print(enemys[2].x);
-  //   Serial.print(" y: ");
-  //   Serial.println(enemys[2].y);
-  //   Serial.print("Enemy 4: x: ");
-  //   Serial.print(enemys[3].x);
-  //   Serial.print(" y: ");
-  //   Serial.println(enemys[3].y);
 
   // }
 
@@ -315,11 +290,11 @@ void loseLife(){
   LCDChanged = true;
 
   if(lifes == NR_OF_LIFES_FOR_LOOSING){
-    gameState = DEATH_ANIMATION;
-    LCDState = END_GAME;
-    LCDChanged = true;
+    totalScore += score;
+    gameState = WINNING_ANIMATION;
+    LCDState = WINNING_INFO1;
+    matrixChanged = true;
   }        
-
 }
 
 //read joystick input and update the position of the player
@@ -492,12 +467,12 @@ int updateScore(){
   nrOfWalls = newWalls;
   long bombingSpeed = millis() - bombWallsTimer;
   bombWallsTimer = millis();
-  int addedToScore;
+  int addToScore;
   if(5000 - bombingSpeed < 100){
-    addedToScore = lifes * level;
+    addToScore = bombedWalls * lifes * level;
   }
   else{
-    addedToScore = lifes * level * (5000 - bombingSpeed)/100;
+    addToScore = bombedWalls * lifes * level * (5000 - bombingSpeed)/100;
   }
-  Serial.println(addedToScore);
+  score += addToScore;
 }

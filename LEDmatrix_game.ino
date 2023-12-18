@@ -206,6 +206,7 @@ extern int damageInterval;
 
 long bombWallsTimer = 0;
 int score = 0;
+extern int totalScore;
 int nrOfWalls;
 
 void setup() {
@@ -237,7 +238,7 @@ void setup() {
 }
 
 void loop() {
-
+  // Serial.println(LCDChanged);
 
   if(LCDState == WELCOME){
     if(wasLCDResetForMessageDisplay == false){
@@ -384,7 +385,9 @@ void loop() {
  //if the time for the death animation is up, generate next map
   if(gameState == DEATH_ANIMATION){
     if(millis() - showDeathStart > DEFAULT_ANIMATION_DISPLAY && LCDState != END_GAME){
-      enterMenu();
+      // enterMenu();
+      LCDState = WINNING_INFO1;
+      LCDChanged = true;
     }
   }
 
@@ -425,6 +428,8 @@ void loop() {
 //new level, if lost, function is called
 void startLevel(){
   lifes = MAX_LIFES;
+  totalScore += score;
+  score = 0;
   bombWallsTimer = millis();
   xBias = MATRIX_SIZE/2;
   yBias = MATRIX_SIZE/2;
@@ -433,8 +438,6 @@ void startLevel(){
 
   generateMap();
   nrOfWalls = countWalls();
-  Serial.print("Initial nr of walls: ");
-  Serial.println(nrOfWalls);
 
   stopTextLCD();
   gameState = PLAYING;
@@ -471,7 +474,9 @@ void buttonPressLogic(){
         if(pressState == HIGH){
           // if user wants death animation to be skipped
           if(gameState == DEATH_ANIMATION){
-            enterMenu();
+            LCDState = WINNING_INFO1;
+            LCDChanged = true;
+            // enterMenu();
           }
           // if user wants finish level animation to be skipped
           else if(gameState == FINISH_LEVEL_ANIMATION){
@@ -566,7 +571,7 @@ void selectMenu(){
           menuLevel = THIRD_MENU;
           secondMenuPick = MATRIX_BRIGHTNESS;
           break;
-
+        
         default:
           break;
       }

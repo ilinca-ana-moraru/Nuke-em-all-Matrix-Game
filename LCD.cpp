@@ -47,6 +47,8 @@ byte currentNameSettingPosition = 0;
 bool goBackRead = 0;
 unsigned long lastGoBackCheck = 0;
 bool goBackState = 0;
+extern int score;
+int totalScore = 0;
 
 void showTextLCD(char* text){
     char space = ' ';
@@ -61,7 +63,9 @@ void showTextLCD(char* text){
         }
         else{
           stopTextLCD();
-          LCDState = MAIN_MENU;
+          if(LCDState != WINNING_INFO2){
+            LCDState = MAIN_MENU;
+          }
         }
     }
 }
@@ -396,6 +400,16 @@ void displayInGameLCD(){
   for(int i = MIN_LIFES; i <= lifes; i++){
       lcd.write(HEART);
   }
+  lcd.setCursor(FIRST_ROW, SECOND_COLUMN);
+  lcd.print(score);
+
+    lcd.setCursor(NAME_ROW, SECOND_COLUMN);
+    char ch;
+    for(int i = 0; i < LENGTH_OF_NAME; i++){
+      ch = EEPROM[NAME_STORRING_SPACE+i];
+      lcd.print(ch);
+    }
+
   LCDChanged = true;
 }
 
@@ -470,7 +484,9 @@ void displayWinGameInfo(){
     lcd.print(" !");
   }
   if(LCDState == WINNING_INFO2){
-    lcd.print("statistics");
+    lcd.print("Score: ");
+    lcd.print(totalScore);
+    Serial.print("statistics\n");
   }
   LCDChanged = false;
 }
