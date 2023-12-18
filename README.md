@@ -46,4 +46,13 @@ I chose to build a mining game because I like the visual of a bomb being explode
 takes place in a mine, and the player's scope is to bomb every wall while running from the explosion, as he can lose lifes otherwise. The game has 3 levels, and at the start of each level the player starts with 3 lifes. If all 3 lifes are lost, the game is ended. If the player has at least 1 life after bombing all walls, the next level starts. <br>
 The levels have progressing difficulty, as in level 2 and 3 the player encounters 2 and 4 enemys. When an enemy hits an wall, he takes a new direction. The walls, as well as the enemys starting position and movement are randomly generated using the Arduino random() function. 
 
-The 
+In the LCD menu, you can select to start the game,highscores( see top 3 or reset) , settings (set name, matrix or LCD brightness) or about, were you can read minimal information about the game.
+
+# Components used 
+- LCD => displays menu and various messages <br>
+- joystick => used for playing the game and navigating the menu <br>
+- 8 x 8 led  matrix => the game and some animations are displayed here <br>
+- pushbutton => for going back in the menu <br>
+
+# Photo
+![photo](https://github.com/ilinca-ana-moraru/Nuke-em-all-Matrix-Game/blob/main/led_matrix_game_photo.jpeg)
